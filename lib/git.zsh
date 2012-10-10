@@ -21,9 +21,15 @@ parse_git_dirty() {
 
 # Checks if there are commits ahead from remote
 function git_prompt_ahead() {
-  if $(echo "$(git log origin/$(current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
-    echo "$ZSH_THEME_GIT_PROMPT_AHEAD"
+  STATUS=""
+  if $(echo "$(git branch -v 2> /dev/null | grep $(current_branch 2> /dev/null) 2> /dev/null)" | grep "\[ahead.*\]" &> /dev/null); then
+    STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
+    if $(echo "$(git branch -v 2> /dev/null | grep $(current_branch 2> /dev/null) 2> /dev/null)" | grep "\[behind.*\]" &> /dev/null); then
+     STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
+  fi
+
+  echo $STATUS
 }
 
 # Formats prompt string for current git commit short SHA
@@ -71,7 +77,7 @@ git_prompt_status() {
 
 #compare the provided version of git to the version installed and on path
 #prints 1 if input version <= installed version
-#prints -1 otherwise 
+#prints -1 otherwise
 function git_compare_version() {
   local INPUT_GIT_VERSION=$1;
   local INSTALLED_GIT_VERSION
