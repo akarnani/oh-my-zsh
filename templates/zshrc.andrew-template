@@ -36,6 +36,7 @@ if [ -f ~/.zsh_nocorrect ]
         done < ~/.zsh_nocorrect
 fi
 
+VIRTUAL_ENV_DISABLE_PROMPT="true"
 PROJECT_HOME=~/Code
 WORKON_HOME=~/.envs
 source /usr/local/bin/virtualenvwrapper.sh
